@@ -2,13 +2,7 @@
 --Reg No: 224020129
 --Advanced Database Technology
 
--- Drop existing tables if any (optional for clean setup)
-DROP TABLE IF EXISTS Payment CASCADE;
-DROP TABLE IF EXISTS Delivery CASCADE;
-DROP TABLE IF EXISTS PurchaseOrder CASCADE;
-DROP TABLE IF EXISTS Bid CASCADE;
-DROP TABLE IF EXISTS PurchaseRequest CASCADE;
-DROP TABLE IF EXISTS Supplier CASCADE;
+--E-Procurement and Supplier Management System
 
 -- 1. Supplier Table
 CREATE TABLE Supplier (
@@ -86,8 +80,28 @@ VALUES
 
 select * from PurchaseRequest  --To see how my table look like
 
+    INSERT INTO Bid (BidID, SupplierID, RequestID, Amount, DeliveryDays, Decision) VALUES
+(1, 1, 1, 5000.00, 15, 'Approved'),
+(2, 2, 2, 7500.00, 10, 'Approved'),
+(3, 3, 3, 12000.00, 20, 'Approved'),
+(4, 1, 4, 4500.00, 12, 'Approved'),
+(5, 2, 5, 9000.00, 8, 'Approved');
+
+-- Verify the inserted data
+SELECT * FROM Bid;
+
+INSERT INTO PurchaseOrder (BidID, OrderDate, Quantity, TotalAmount) VALUES
+(1, '2024-01-15', 100, 5000.00),
+(2, '2024-01-18', 50, 7500.00),
+(3, '2024-01-20', 200, 12000.00),
+(4, '2024-01-22', 75, 4500.00),
+(5, '2024-01-25', 150, 9000.00);
+
+-- Verify the inserted data
+SELECT * FROM PurchaseOrder;
+
+
 -- QUERIES
--- -----------------------------
 
 -- 1. Retrieve all approved bids with supplier info
 SELECT 
@@ -146,9 +160,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_update_supplier_rating
-AFTER UPDATE ON Delivery
-FOR EACH ROW
-EXECUTE FUNCTION update_supplier_rating();
+DELETE FROM PurchaseOrder 
+WHERE OrderId = '3';
+
 
 
